@@ -5,4 +5,4 @@ We aim to implement The Zipper Algorithm, an elementary procedure to develop a c
 ## to run
 poetry shell \
 pytest \
-jupyter lab \
+jupyter lab
