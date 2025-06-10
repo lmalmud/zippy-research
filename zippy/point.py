@@ -12,7 +12,7 @@ class Point:
                  z: complex,
                  name: str = None,
                  is_origin: bool = False,
-                 branch_sign: int = 1):
+                 branch_sign: int = 0):
         '''
         Constructor.
         Parameters
