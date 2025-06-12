@@ -29,6 +29,7 @@ def f3sqrt(z: complex) -> complex:
     where the branch cut is along (0, \infty) - which
     means that the argument of the outputs will lie between
     [0, 2\pi]
+    This code was taken from: https://flothesof.github.io/branch-cuts-with-square-roots.html
     Parameters:
     z (complex): point to apply map to
     Returns:
