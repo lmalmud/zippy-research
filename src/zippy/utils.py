@@ -5,6 +5,7 @@ Relevant math helper functions.
 
 import numpy as np
 import colorsys
+from zippy.point import Point
 from typing import List
 
 def sign(z: complex) -> int:
@@ -87,6 +88,22 @@ def generate_complex(min_r: float, max_r: float, min_c: float, max_c: float, den
             results.append(complex(r, i))
     return results
 
+def generate_complex_point(min_r: float, max_r: float, min_c: float, max_c: float, density=10) -> List[Point]:
+    '''
+    Generates a list of Point objects
+    real value in the range [min_r, max_r] and complex value
+    in the range [min_c, max_c].
+    Parameters:
+    min_r (float), min_c (float): the minimum value for real and complex components, respectively
+    max_r (flaot), max_c (float): the maximum value for real and complex components, respectively
+    density (int): the number of points generated per unit
+    Returns:
+    List[Point]: list of Points in the given range with specified density
+    '''
+    reals = np.linspace(min_r, max_r, density*(max_r - min_r))
+    imags = np.linspace(min_c, max_c, density*(max_c - min_c))
+    return [Point(complex(r, i)) for r in reals for i in imags]
+
 def get_coords_from_complex(lst: List[complex]) -> List[float]:
     '''
     Given a list of complex points, returns a list of order pairs of
@@ -118,3 +135,13 @@ def get_real_image_from_complex(lst: List[complex]):
         reals.append(p.real)
         imags.append(p.imag)
     return reals, imags
+
+def graph_complex(pts: List[complex], ax, func):
+    '''
+    Plots the complex function on the given axis.
+    Parameters:
+    pts (List[complex]): list of points to apply the function to
+    ax (matplotlib axis object): to show the graph on
+    func (function): function to apply to points
+    '''
+    pass

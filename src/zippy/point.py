@@ -11,7 +11,7 @@ class Point:
     def __init__(self,
                  z: complex,
                  name: str = None,
-                 is_origin: bool = False,
+                 is_origin: bool = None,
                  branch_sign: int = 0):
         '''
         Constructor.
@@ -24,10 +24,18 @@ class Point:
 
         self.z = z
         self.is_origin = is_origin
+
+        # Ensure that a point is assigned to be the origin if it is and no parameter
+        # was given
+        if is_origin == None and z == complex(0, 0):
+            self.is_origin = True
+        elif is_origin == None:
+            self.is_origin = False
+            
         self.branch_sign = branch_sign
 
         # If no name is provided, the name of the point will be the location given
         if name == None:
-            self.name = str(p)
+            self.name = str(z)
         else:
             self.name = name

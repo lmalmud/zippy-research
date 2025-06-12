@@ -21,8 +21,8 @@ class F_a:
         '''
 
         self.a = a.z
-        self.b = np.abs(a) / a.real
-        self.c = np.abs(a) / a.imag
+        self.b = np.abs(self.a) / self.a.real
+        self.c = np.abs(self.a) / self.a.imag
 
     def f1(self, p: Point) -> Point:
         '''
@@ -36,7 +36,7 @@ class F_a:
 
         # f_1(b) = \inf
         if p.z == 0:
-            return None # FIXME: How do we want to handle this?
+            return Point(z=complex(0, 0)) # FIXME: How do we want to handle this?
         
         
         # FIXME: is it possible that a point very close to the actual base point a
@@ -94,10 +94,10 @@ class F_a:
             sqrt_val = f3sqrt(p.z)
             return [
                 Point(z = sqrt_val, is_origin = False, name = p.name, branch_sign = 1),
-                Point(z = sqrt_val, is_origin = False, name = p.name, branch_sign = -1)
+                Point(z = -sqrt_val, is_origin = False, name = p.name, branch_sign = -1)
             ]
         else:
-            sign = p.branch_sign if p.branch_sigh != 0 else 1
+            sign = p.branch_sign if p.branch_sign != 0 else 1 # Defaults to the principal branch
             sqrt_val = sign * f3sqrt(p.z)
             return [
                 Point(z = sqrt_val, is_origin = False, branch_sign = sign, name = p.name)
