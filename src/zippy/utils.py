@@ -37,6 +37,7 @@ def f3sqrt(z: complex) -> complex:
     complex: sqrt(z)
     '''
 
+
     # np.angle = tangent function for complex inputs
     argument = np.angle(z)
     modulus = np.abs(z)
@@ -45,6 +46,26 @@ def f3sqrt(z: complex) -> complex:
     argument = np.mod(argument + 2 * np.pi, 2 * np.pi) - 2 * np.pi
     
     return np.sqrt(modulus) * np.exp(1j * argument / 2)
+
+    '''
+    # Convert the original point to polar coordinates
+    real_part = z.real
+    imag_part = z.imag
+    r = np.sqrt(real_part ** 2 + imag_part ** 2)
+    
+    # Note that we subtract pi from theta in order to get the desired branch cut in arctan
+    theta = np.arctan2(imag_part, real_part) - np.pi
+    p = complex(r * np.cos(theta), r * np.sin(theta))
+
+    result = np.sqrt(p)
+    new_real_part = result.real
+    new_imag_part = result.imag
+    new_r = np.sqrt(new_real_part ** 2 + new_imag_part ** 2)
+    
+    # Wwe add back pi/2 to reset to the original point
+    new_theta = np.arctan2(new_imag_part, new_real_part) + (np.pi / 2)
+    return complex(new_r * np.cos(new_theta), new_r * np.sin(new_theta))
+    '''
 
 def get_color(z: complex) -> List:
     '''

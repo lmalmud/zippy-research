@@ -21,8 +21,8 @@ class F_a:
         '''
 
         self.a = a.z
-        self.b = np.abs(self.a) / self.a.real
-        self.c = np.abs(self.a) / self.a.imag
+        self.b = (np.abs(self.a) ** 2) / self.a.real
+        self.c = (np.abs(self.a) ** 2) / self.a.imag
 
     def f1(self, p: Point) -> Point:
         '''
@@ -35,19 +35,9 @@ class F_a:
         '''
 
         # f_1(b) = \inf
-        if p.z == 0:
-            return Point(z=complex(0, 0)) # FIXME: How do we want to handle this?
+        if p.z == self.b:
+            return Point(z=complex(np.inf, 0)) # FIXME: How do we want to handle this?
         
-        
-        # FIXME: is it possible that a point very close to the actual base point a
-        # could be interpreted as that a that defines this particular map?
-        # f_1(a) = 0
-        elif p.z == self.a:
-            return Point(z = complex(0, 0),
-                         is_origin = True,
-                         name = p.name,
-                         branch_sign = 0) # It does not matter what branch_sign is
-
         # Otherwise, map is applied as usual
         else:
             z = p.z / (1 - p.z / self.b)
@@ -55,6 +45,19 @@ class F_a:
                          is_origin = False,
                          name = p.name,
                          branch_sign = sign(z))
+        
+        # FIXME: is it possible that a point very close to the actual base point a
+        # could be interpreted as that a that defines this particular map?
+        # f_1(a) = 0
+        '''
+        elif p.z == self.a:
+            return Point(z = complex(0, 0),
+                         is_origin = True,
+                         name = p.name,
+                         branch_sign = 0) # It does not matter what branch_sign is
+        '''
+
+        
 
     def f2(self, p: Point) -> Point:
         '''
