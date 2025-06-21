@@ -123,7 +123,19 @@ def generate_complex_point(min_r: float, max_r: float, min_c: float, max_c: floa
     '''
     reals = np.linspace(min_r, max_r, density*(max_r - min_r))
     imags = np.linspace(min_c, max_c, density*(max_c - min_c))
-    return [Point(complex(r, i)) for r in reals for i in imags]
+    results = []
+    for r in reals:
+        for i in imags:
+            p = Point(complex(r,i))
+
+            # Ensure that attributes are appropriately set
+            if i == 0:
+                if r == 0:
+                    p.is_origin = True
+                print('set the axis to be True')
+                p.on_axis = True
+            results.append(p)
+    return results
 
 def get_coords_from_complex(lst: List[complex]) -> List[float]:
     '''

@@ -42,7 +42,9 @@ class F_a:
         else:
             z = p.z / (1 - p.z / self.b)
             return Point(z = z,
-                         is_origin = False,
+                         is_origin = p.is_origin,
+                         on_axis = p.on_axis,
+                         on_arc = p.on_arc,
                          name = p.name,
                          branch_sign = sign(z))
         
@@ -75,6 +77,8 @@ class F_a:
 
         return Point(z = z,
                      is_origin = p.is_origin,
+                     on_axis = p.on_axis,
+                     on_arc = p.on_arc,
                      name = p.name,
                      branch_sign = p.branch_sign)
 
@@ -93,15 +97,33 @@ class F_a:
         if p.z == 0 and not p.is_origin:
             raise ValueError("Unexpected: zero encountered in f3 from non-origin point.")
 
-        if p.is_origin:
-            sqrt_val = f3sqrt(p.z)
+        '''
+        In traditional complex analysis, the output is undefined along the branch cut.
+        For this implementation, we allow *both* values along this branch.
+        Note that all points that are on the real axis are points that were *originally* on the arc
+        '''
+        if p.is_origin or p.on_arc:
+
+            # Note that here we are using the standard square root function.
+            # When we do not use the standard one, the wrong branch is assigned.
+            # The square root function with the branch cut along (0, \infty) is f3sqrt
+            sqrt_val = np.sqrt(p.z)
+            print(f'the square root value is: {sqrt_val} when the input is {p.z}')
             return [
                 Point(z = sqrt_val, is_origin = False, name = p.name, branch_sign = 1),
                 Point(z = -sqrt_val, is_origin = False, name = p.name, branch_sign = -1)
             ]
-        else:
-            sign = p.branch_sign if p.branch_sign != 0 else 1 # Defaults to the principal branch
-            sqrt_val = sign * f3sqrt(p.z)
+        
+        elif p.on_axis:
+            
+            sqrt_val = p.branch_sign * f3sqrt(p.z)
             return [
-                Point(z = sqrt_val, is_origin = False, branch_sign = sign, name = p.name)
+                Point(z = sqrt_val, is_origin = False, on_axis = True, branch_sign = p.branch_sign, name = p.name)
+            ]
+        
+        else:
+            # Defaults to the principal branch for all non-axis values
+            sqrt_val = f3sqrt(p.z)
+            return [
+                Point(z = sqrt_val, is_origin = False, on_axis = False, branch_sign = sign, name = p.name)
             ]
